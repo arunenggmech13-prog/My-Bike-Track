@@ -10,58 +10,74 @@
     <link rel="icon" type="image/png" sizes="192x192" href="images/icon-192x192.png">
     <link rel="icon" type="image/png" sizes="512x512" href="images/icon-512x512.png">
     <link rel="apple-touch-icon" href="images/icon-192x192.png">
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-q3gk+YfYkqv3r6Xg0r2zq0E9b+6W3Xr4JpQ7s5QvE0fNnF5w6l8hZ9Y1K3Q7f1J6" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
+    <style>
+      /* Small overrides to make the existing markup play nicely with Bootstrap */
+      body { background: #f8f9fa; }
+      .header h1 { font-size: 1.6rem; margin: 0; }
+      .subtitle { color: #6c757d; margin-bottom: 0; }
+      .tabs .tab-btn { min-width: 110px; }
+      .big-number { font-size: 1.25rem; font-weight: 600; }
+      .card { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+      .empty-state { color: #6c757d; }
+      .toast { position: fixed; right: 1rem; bottom: 1rem; z-index: 1080; }
+      /* Make modal from original markup visible without changing app.js */
+      .modal { display: none; position: fixed; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+      .modal .modal-content { background: #fff; padding: 1rem; border-radius: .5rem; max-width: 480px; }
+    </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container py-4">
         <!-- Header -->
-        <header class="header">
+        <header class="header text-center mb-4">
             <h1>🏍️ My Bike Track</h1>
             <p class="subtitle">Fuel • Mileage • Service • Maintenance</p>
         </header>
 
         <!-- Navigation Tabs -->
-        <nav class="tabs">
-            <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-            <button class="tab-btn" data-tab="fuel">Fuel Entry</button>
-            <button class="tab-btn" data-tab="service">Service</button>
-            <button class="tab-btn" data-tab="spares">Spares</button>
-            <button class="tab-btn" data-tab="trips">Trips</button>
-            <button class="tab-btn" data-tab="settings">Settings</button>
+        <nav class="tabs d-flex justify-content-center mb-4" role="tablist">
+            <button class="tab-btn btn btn-sm btn-outline-primary active mx-1" data-tab="dashboard">Dashboard</button>
+            <button class="tab-btn btn btn-sm btn-outline-primary mx-1" data-tab="fuel">Fuel Entry</button>
+            <button class="tab-btn btn btn-sm btn-outline-primary mx-1" data-tab="service">Service</button>
+            <button class="tab-btn btn btn-sm btn-outline-primary mx-1" data-tab="spares">Spares</button>
+            <button class="tab-btn btn btn-sm btn-outline-primary mx-1" data-tab="trips">Trips</button>
+            <button class="tab-btn btn btn-sm btn-outline-secondary mx-1" data-tab="settings">Settings</button>
         </nav>
 
         <!-- Dashboard Tab -->
         <section id="dashboard" class="tab-content active">
-            <div class="dashboard-grid">
+            <div class="dashboard-grid row g-3">
                 <!-- Summary Cards -->
-                <div class="card summary-card">
-                    <h3>Current Mileage</h3>
+                <div class="card summary-card col-6 col-md-3 p-3">
+                    <h3 class="h6">Current Mileage</h3>
                     <p class="big-number" id="totalMileage">0 km</p>
                 </div>
-                <div class="card summary-card">
-                    <h3>Fuel Efficiency</h3>
+                <div class="card summary-card col-6 col-md-3 p-3">
+                    <h3 class="h6">Fuel Efficiency</h3>
                     <p class="big-number" id="fuelEfficiency">0 km/l</p>
                 </div>
-                <div class="card summary-card">
-                    <h3>Total Fuel Cost</h3>
+                <div class="card summary-card col-6 col-md-3 p-3">
+                    <h3 class="h6">Total Fuel Cost</h3>
                     <p class="big-number" id="totalFuelCost">₹0</p>
                 </div>
-                <div class="card summary-card">
-                    <h3>Service Due</h3>
+                <div class="card summary-card col-6 col-md-3 p-3">
+                    <h3 class="h6">Service Due</h3>
                     <p class="big-number" id="serviceDue">-</p>
                 </div>
 
                 <!-- Recent Entries -->
-                <div class="card full-width">
-                    <h3>Recent Fuel Entries</h3>
+                <div class="card full-width col-12 p-3">
+                    <h3 class="h6">Recent Fuel Entries</h3>
                     <div id="recentFuelList" class="recent-list">
                         <p class="empty-state">No fuel entries yet</p>
                     </div>
                 </div>
 
                 <!-- Service Status -->
-                <div class="card full-width">
-                    <h3>Next Service Due</h3>
+                <div class="card full-width col-12 p-3">
+                    <h3 class="h6">Next Service Due</h3>
                     <div id="serviceStatus" class="service-status">
                         <p class="empty-state">No service scheduled</p>
                     </div>
@@ -71,36 +87,38 @@
 
         <!-- Fuel Entry Tab -->
         <section id="fuel" class="tab-content">
-            <div class="card">
-                <h3>Add Fuel Entry</h3>
-                <form id="fuelForm" class="form">
-                    <div class="form-group">
-                        <label for="fuelDate">Date</label>
-                        <input type="date" id="fuelDate" required>
+            <div class="card p-3 mb-3">
+                <h3 class="h6">Add Fuel Entry</h3>
+                <form id="fuelForm" class="form row g-2">
+                    <div class="form-group col-12 col-md-4">
+                        <label for="fuelDate" class="form-label">Date</label>
+                        <input type="date" id="fuelDate" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label for="mileage">Mileage (km)</label>
-                        <input type="number" id="mileage" placeholder="Enter current mileage" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="mileage" class="form-label">Mileage (km)</label>
+                        <input type="number" id="mileage" class="form-control" placeholder="Enter current mileage" required>
                     </div>
-                    <div class="form-group">
-                        <label for="fuelQuantity">Fuel Quantity (liters)</label>
-                        <input type="number" id="fuelQuantity" step="0.1" placeholder="Enter fuel liters" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="fuelQuantity" class="form-label">Fuel Quantity (liters)</label>
+                        <input type="number" id="fuelQuantity" class="form-control" step="0.1" placeholder="Enter fuel liters" required>
                     </div>
-                    <div class="form-group">
-                        <label for="fuelPrice">Fuel Price (₹)</label>
-                        <input type="number" id="fuelPrice" step="0.01" placeholder="Enter price per liter" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="fuelPrice" class="form-label">Fuel Price (₹)</label>
+                        <input type="number" id="fuelPrice" class="form-control" step="0.01" placeholder="Enter price per liter" required>
                     </div>
-                    <div class="form-group">
-                        <label for="fuelNotes">Notes (Optional)</label>
-                        <textarea id="fuelNotes" placeholder="Add any notes"></textarea>
+                    <div class="form-group col-12">
+                        <label for="fuelNotes" class="form-label">Notes (Optional)</label>
+                        <textarea id="fuelNotes" class="form-control" placeholder="Add any notes"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Fuel Entry</button>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Add Fuel Entry</button>
+                    </div>
                 </form>
             </div>
 
             <!-- Fuel History -->
-            <div class="card">
-                <h3>Fuel History</h3>
+            <div class="card p-3">
+                <h3 class="h6">Fuel History</h3>
                 <div id="fuelHistoryList" class="list-container">
                     <p class="empty-state">No fuel entries yet</p>
                 </div>
@@ -109,20 +127,20 @@
 
         <!-- Service Tab -->
         <section id="service" class="tab-content">
-            <div class="card">
-                <h3>Add Service Record</h3>
-                <form id="serviceForm" class="form">
-                    <div class="form-group">
-                        <label for="serviceDate">Service Date</label>
-                        <input type="date" id="serviceDate" required>
+            <div class="card p-3 mb-3">
+                <h3 class="h6">Add Service Record</h3>
+                <form id="serviceForm" class="form row g-2">
+                    <div class="form-group col-12 col-md-4">
+                        <label for="serviceDate" class="form-label">Service Date</label>
+                        <input type="date" id="serviceDate" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label for="serviceMileage">Mileage (km)</label>
-                        <input type="number" id="serviceMileage" placeholder="Mileage at service" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="serviceMileage" class="form-label">Mileage (km)</label>
+                        <input type="number" id="serviceMileage" class="form-control" placeholder="Mileage at service" required>
                     </div>
-                    <div class="form-group">
-                        <label for="serviceType">Service Type</label>
-                        <select id="serviceType" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="serviceType" class="form-label">Service Type</label>
+                        <select id="serviceType" class="form-select" required>
                             <option value="">Select service type</option>
                             <option value="Regular">Regular Service</option>
                             <option value="Major">Major Service</option>
@@ -135,25 +153,27 @@
                             <option value="Other">Other</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="serviceCost">Service Cost (₹)</label>
-                        <input type="number" id="serviceCost" step="0.01" placeholder="Service cost" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="serviceCost" class="form-label">Service Cost (₹)</label>
+                        <input type="number" id="serviceCost" class="form-control" step="0.01" placeholder="Service cost" required>
                     </div>
-                    <div class="form-group">
-                        <label for="nextServiceKm">Next Service Due (km)</label>
-                        <input type="number" id="nextServiceKm" placeholder="Mileage for next service">
+                    <div class="form-group col-12 col-md-4">
+                        <label for="nextServiceKm" class="form-label">Next Service Due (km)</label>
+                        <input type="number" id="nextServiceKm" class="form-control" placeholder="Mileage for next service">
                     </div>
-                    <div class="form-group">
-                        <label for="serviceNotes">Notes</label>
-                        <textarea id="serviceNotes" placeholder="Service details"></textarea>
+                    <div class="form-group col-12">
+                        <label for="serviceNotes" class="form-label">Notes</label>
+                        <textarea id="serviceNotes" class="form-control" placeholder="Service details"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Record Service</button>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Record Service</button>
+                    </div>
                 </form>
             </div>
 
             <!-- Service History -->
-            <div class="card">
-                <h3>Service History</h3>
+            <div class="card p-3">
+                <h3 class="h6">Service History</h3>
                 <div id="serviceHistoryList" class="list-container">
                     <p class="empty-state">No service records yet</p>
                 </div>
@@ -162,20 +182,20 @@
 
         <!-- Spares Tab -->
         <section id="spares" class="tab-content">
-            <div class="card">
-                <h3>Add Spares/Parts Purchase</h3>
-                <form id="sparesForm" class="form">
-                    <div class="form-group">
-                        <label for="sparesDate">Purchase Date</label>
-                        <input type="date" id="sparesDate" required>
+            <div class="card p-3 mb-3">
+                <h3 class="h6">Add Spares/Parts Purchase</h3>
+                <form id="sparesForm" class="form row g-2">
+                    <div class="form-group col-12 col-md-4">
+                        <label for="sparesDate" class="form-label">Purchase Date</label>
+                        <input type="date" id="sparesDate" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label for="sparesName">Part/Spares Name</label>
-                        <input type="text" id="sparesName" placeholder="e.g., Spark Plug, Brake Pad" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="sparesName" class="form-label">Part/Spares Name</label>
+                        <input type="text" id="sparesName" class="form-control" placeholder="e.g., Spark Plug, Brake Pad" required>
                     </div>
-                    <div class="form-group">
-                        <label for="sparesCategory">Category</label>
-                        <select id="sparesCategory" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="sparesCategory" class="form-label">Category</label>
+                        <select id="sparesCategory" class="form-select" required>
                             <option value="">Select category</option>
                             <option value="Engine">Engine</option>
                             <option value="Brakes">Brakes</option>
@@ -188,33 +208,35 @@
                             <option value="Other">Other</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="sparesCost">Cost (₹)</label>
-                        <input type="number" id="sparesCost" step="0.01" placeholder="Cost" required>
+                    <div class="form-group col-12 col-md-3">
+                        <label for="sparesCost" class="form-label">Cost (₹)</label>
+                        <input type="number" id="sparesCost" class="form-control" step="0.01" placeholder="Cost" required>
                     </div>
-                    <div class="form-group">
-                        <label for="sparesQuantity">Quantity</label>
-                        <input type="number" id="sparesQuantity" value="1" min="1" required>
+                    <div class="form-group col-12 col-md-3">
+                        <label for="sparesQuantity" class="form-label">Quantity</label>
+                        <input type="number" id="sparesQuantity" class="form-control" value="1" min="1" required>
                     </div>
-                    <div class="form-group">
-                        <label for="sparesNotes">Notes</label>
-                        <textarea id="sparesNotes" placeholder="Part details, warranty info, etc."></textarea>
+                    <div class="form-group col-12">
+                        <label for="sparesNotes" class="form-label">Notes</label>
+                        <textarea id="sparesNotes" class="form-control" placeholder="Part details, warranty info, etc."></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Add Purchase</button>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Add Purchase</button>
+                    </div>
                 </form>
             </div>
 
             <!-- Spares Summary -->
-            <div class="card">
-                <h3>Spares Summary</h3>
+            <div class="card p-3 mb-3">
+                <h3 class="h6">Spares Summary</h3>
                 <div id="sparesSummary" class="summary-grid">
                     <p class="empty-state">No spares purchased yet</p>
                 </div>
             </div>
 
             <!-- Spares History -->
-            <div class="card">
-                <h3>Purchase History</h3>
+            <div class="card p-3">
+                <h3 class="h6">Purchase History</h3>
                 <div id="sparesHistoryList" class="list-container">
                     <p class="empty-state">No purchases yet</p>
                 </div>
@@ -223,58 +245,60 @@
 
         <!-- Trips Tab -->
         <section id="trips" class="tab-content">
-            <div class="card">
-                <h3>Record Trip</h3>
-                <form id="tripForm" class="form">
-                    <div class="form-group">
-                        <label for="tripDate">Trip Date</label>
-                        <input type="date" id="tripDate" required>
+            <div class="card p-3 mb-3">
+                <h3 class="h6">Record Trip</h3>
+                <form id="tripForm" class="form row g-2">
+                    <div class="form-group col-12 col-md-4">
+                        <label for="tripDate" class="form-label">Trip Date</label>
+                        <input type="date" id="tripDate" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label for="tripFrom">From</label>
-                        <input type="text" id="tripFrom" placeholder="Starting location" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="tripFrom" class="form-label">From</label>
+                        <input type="text" id="tripFrom" class="form-control" placeholder="Starting location" required>
                     </div>
-                    <div class="form-group">
-                        <label for="tripTo">To</label>
-                        <input type="text" id="tripTo" placeholder="Destination" required>
+                    <div class="form-group col-12 col-md-4">
+                        <label for="tripTo" class="form-label">To</label>
+                        <input type="text" id="tripTo" class="form-control" placeholder="Destination" required>
                     </div>
-                    <div class="form-group">
-                        <label for="tripDistance">Distance (km)</label>
-                        <input type="number" id="tripDistance" placeholder="Trip distance" required>
+                    <div class="form-group col-12 col-md-3">
+                        <label for="tripDistance" class="form-label">Distance (km)</label>
+                        <input type="number" id="tripDistance" class="form-control" placeholder="Trip distance" required>
                     </div>
-                    <div class="form-group">
-                        <label for="tripStartMileage">Start Mileage (km)</label>
-                        <input type="number" id="tripStartMileage" placeholder="Mileage at start" required>
+                    <div class="form-group col-12 col-md-3">
+                        <label for="tripStartMileage" class="form-label">Start Mileage (km)</label>
+                        <input type="number" id="tripStartMileage" class="form-control" placeholder="Mileage at start" required>
                     </div>
-                    <div class="form-group">
-                        <label for="tripEndMileage">End Mileage (km)</label>
-                        <input type="number" id="tripEndMileage" placeholder="Mileage at end" required>
+                    <div class="form-group col-12 col-md-3">
+                        <label for="tripEndMileage" class="form-label">End Mileage (km)</label>
+                        <input type="number" id="tripEndMileage" class="form-control" placeholder="Mileage at end" required>
                     </div>
-                    <div class="form-group">
-                        <label for="tripDuration">Duration (hours)</label>
-                        <input type="number" id="tripDuration" step="0.5" placeholder="Trip duration">
+                    <div class="form-group col-12 col-md-3">
+                        <label for="tripDuration" class="form-label">Duration (hours)</label>
+                        <input type="number" id="tripDuration" class="form-control" step="0.5" placeholder="Trip duration">
                     </div>
-                    <div class="form-group">
-                        <label for="tripNotes">Trip Notes</label>
-                        <textarea id="tripNotes" placeholder="Trip details, road conditions, etc."></textarea>
+                    <div class="form-group col-12">
+                        <label for="tripNotes" class="form-label">Trip Notes</label>
+                        <textarea id="tripNotes" class="form-control" placeholder="Trip details, road conditions, etc."></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Record Trip</button>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Record Trip</button>
+                    </div>
                 </form>
             </div>
 
             <!-- Trip Statistics -->
-            <div class="card">
-                <h3>Trip Statistics</h3>
-                <div class="stats-grid">
-                    <div class="stat-item">
+            <div class="card p-3 mb-3">
+                <h3 class="h6">Trip Statistics</h3>
+                <div class="stats-grid row g-3">
+                    <div class="stat-item col-4">
                         <label>Total Trips</label>
                         <p class="stat-value" id="totalTrips">0</p>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item col-4">
                         <label>Total Distance</label>
                         <p class="stat-value" id="totalTripDistance">0 km</p>
                     </div>
-                    <div class="stat-item">
+                    <div class="stat-item col-4">
                         <label>Avg Distance/Trip</label>
                         <p class="stat-value" id="avgTripDistance">0 km</p>
                     </div>
@@ -282,8 +306,8 @@
             </div>
 
             <!-- Trip History -->
-            <div class="card">
-                <h3>Trip History</h3>
+            <div class="card p-3">
+                <h3 class="h6">Trip History</h3>
                 <div id="tripHistoryList" class="list-container">
                     <p class="empty-state">No trips recorded yet</p>
                 </div>
@@ -292,26 +316,26 @@
 
         <!-- Settings Tab -->
         <section id="settings" class="tab-content">
-            <div class="card">
-                <h3>Data Management</h3>
-                <div class="settings-group">
+            <div class="card p-3">
+                <h3 class="h6">Data Management</h3>
+                <div class="settings-group mb-3">
                     <h4>Bike Information</h4>
                     <div class="form-group">
-                        <label for="bikeName">Bike Name</label>
-                        <input type="text" id="bikeName" placeholder="e.g., My Honda CB350">
+                        <label for="bikeName" class="form-label">Bike Name</label>
+                        <input type="text" id="bikeName" class="form-control" placeholder="e.g., My Honda CB350">
                     </div>
                     <div class="form-group">
-                        <label for="bikeModel">Bike Model</label>
-                        <input type="text" id="bikeModel" placeholder="e.g., Honda CB350F">
+                        <label for="bikeModel" class="form-label">Bike Model</label>
+                        <input type="text" id="bikeModel" class="form-control" placeholder="e.g., Honda CB350F">
                     </div>
                     <div class="form-group">
-                        <label for="bikeYear">Year of Purchase</label>
-                        <input type="number" id="bikeYear" min="1900" max="2100">
+                        <label for="bikeYear" class="form-label">Year of Purchase</label>
+                        <input type="number" id="bikeYear" class="form-control" min="1900" max="2100">
                     </div>
-                    <button type="button" class="btn btn-secondary" id="saveBikeInfo">Save Bike Info</button>
+                    <button type="button" class="btn btn-secondary mt-2" id="saveBikeInfo">Save Bike Info</button>
                 </div>
 
-                <div class="settings-group">
+                <div class="settings-group mb-3">
                     <h4>Export & Import Data</h4>
                     <button type="button" class="btn btn-secondary" id="exportBtn">Export Data (JSON)</button>
                     <button type="button" class="btn btn-secondary" id="importBtn">Import Data</button>
@@ -332,7 +356,7 @@
         <div class="modal-content">
             <h3>Confirm Delete</h3>
             <p id="confirmMessage">Are you sure you want to delete this item?</p>
-            <div class="modal-buttons">
+            <div class="modal-buttons d-flex gap-2 justify-content-end">
                 <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
                 <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
             </div>
@@ -344,10 +368,28 @@
 
     <script src="db.js"></script>
     <script src="app.js"></script>
+    <!-- Bootstrap JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-4CM7s1YqGZ3t1K7q2l8g6Yf9H2mQ3Q1y2Yp7s6V4w3k9L8m2n5h1J3k2L7p8Q9Z4" crossorigin="anonymous"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
+
+        // Small helper: make tab buttons toggle the existing tab-content sections (so bootstrap isn't required for tab behavior)
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            tabs.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabs.forEach(b => b.classList.remove('active', 'btn-primary'));
+                    btn.classList.add('active', 'btn-primary');
+                    contents.forEach(c => c.classList.remove('active', 'd-block'));
+                    const id = btn.getAttribute('data-tab');
+                    const el = document.getElementById(id);
+                    if (el) el.classList.add('active', 'd-block');
+                });
+            });
+        });
     </script>
 </body>
 </html>
